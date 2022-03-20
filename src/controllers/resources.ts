@@ -1,26 +1,52 @@
 import {Request, Response} from "express";
+import * as repo from '../repositories/resourceRepository';
+import * as versioning from '../services/versioningService';
 
-// interface Resource {
-//     id: Number,
-//     version: Number,
-//     title: String,
-//     description: String,
-// }
-
-const getResource = async (request: Request, res: Response) => {
+export const getResource = async (request: Request, res: Response) => {
     let id: string = request.params.id;
+    let data = await repo.getResource(Number(id));
 
-    if (id === '1') {
-        return res.status(200).json({
-            id: 1,
-            version: 22.1,
-            title: "BedWars1058",
-            description: "A Minecraft mini-game"
-        });
+    if (!data){
+        return getNotFoundResponse(res);
     }
-    return res.status(404).json({
-        message: "Not found!"
+
+    return res.status(404).json(data);
+}
+
+export const getResources = async (request: Request, res: Response) => {
+    let page = request.body.page || 1;
+    let data = await repo.getResources(page);
+
+    return res.status(200).json(data);
+}
+
+export const putResourceVersion = async (request: Request, res: Response) => {
+    let id: string = request.params.id;
+    let resource = await repo.getResource(Number(id));
+
+    if (!resource){
+        return getNotFoundResponse(res);
+    }
+
+    if (!request.body.confirmation){
+        return res.status(400).json({
+            message: 'Body requires confirmation attribute'
+        })
+    }
+
+    let nextCandidate = versioning.getNextCandidate(resource);
+    await repo.updateResourceVersion(resource, nextCandidate);
+
+    return res.status(200).json({
+        version: nextCandidate,
+        message: 'Version string updated!'
     })
 }
 
-export default {getResource};
+const getNotFoundResponse = (res : Response) => {
+    return res.status(404).json({
+        message: 'Not found'
+    });
+}
+
+

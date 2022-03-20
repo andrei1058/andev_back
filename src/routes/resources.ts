@@ -1,7 +1,10 @@
 import express from 'express';
-import controller from '../controllers/resources';
+import * as controller from '../controllers/resources';
+import {checkJwt} from "../middlewares/checkJWT";
 const router = express.Router();
 
-router.get('/resources/:id', controller.getResource);
+router.get('/resources/:id([0-9]+)', [checkJwt],controller.getResource);
+router.get('/resources/', controller.getResources);
+router.put('/resources/:id([0-9]+)/versioning/commit', [checkJwt], controller.putResourceVersion)
 
 export = router;
