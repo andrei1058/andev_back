@@ -1,5 +1,5 @@
 import {YearMonthBuildVersionAdapter} from "./adapters/yearMonthBuildVersionAdapter";
-import {Resource} from "../models/resource";
+import {Resource} from "../entity/Resource";
 
 const defaultProvider = new YearMonthBuildVersionAdapter();
 

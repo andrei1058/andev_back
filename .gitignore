@@ -1,7 +1,6 @@
-# Project exclude paths
-/node_modules/
-/bin/
-/bin/www
-/build/
-/public/swagger.json
-/.env.local
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/

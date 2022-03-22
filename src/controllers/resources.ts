@@ -35,7 +35,7 @@ export const putResourceVersion = async (request: Request, res: Response) => {
     }
 
     let nextCandidate = versioning.getNextCandidate(resource);
-    await repo.updateResourceVersion(resource, nextCandidate);
+    await repo.saveUpdate(resource.setVersion(nextCandidate));
 
     return res.status(200).json({
         version: nextCandidate,

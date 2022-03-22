@@ -1,5 +1,5 @@
 import {VersioningAdapter} from "./versioningAdapter";
-import {Resource} from "../../models/resource";
+import {Resource} from "../../entity/Resource";
 
 export class YearMonthBuildVersionAdapter implements VersioningAdapter {
 
