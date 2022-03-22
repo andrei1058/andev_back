@@ -43,6 +43,32 @@ export const putResourceVersion = async (request: Request, res: Response) => {
     })
 }
 
+export const getResourceCandidateVersion = async (req: Request, res: Response) => {
+    let id: string = req.params.id;
+    let resource = await repo.getResource(Number(id));
+
+    if (!resource){
+        return getNotFoundResponse(res);
+    }
+
+    return res.status(200).json({
+        version: versioning.getNextCandidate(resource)
+    })
+}
+
+export const getResourceCurrentVersion = async (req: Request, res: Response) => {
+    let id: string = req.params.id;
+    let resource = await repo.getResource(Number(id));
+
+    if (!resource){
+        return getNotFoundResponse(res);
+    }
+
+    return res.status(200).json({
+        version: resource.version,
+    })
+}
+
 const getNotFoundResponse = (res : Response) => {
     return res.status(404).json({
         message: 'Not found'
